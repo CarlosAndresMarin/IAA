@@ -12,6 +12,7 @@ import {
   getModelSchemaRef, param, patch, post, put, requestBody,
   response
 } from '@loopback/rest';
+import fetch from 'cross-fetch';
 import {Propietario} from '../models';
 import {PropietarioRepository} from '../repositories';
 import {AutenticacionService} from '../services';
@@ -44,7 +45,13 @@ export class PropietarioController {
   ): Promise<Propietario> {
     //let clave = this.autenticacionService.generarClave();
     propietario.clave = this.autenticacionService.cifrarClave(propietario.clave);
-    return this.propietarioRepository.create(propietario);
+    let prop = await this.propietarioRepository.create(propietario);
+    console.log(prop.correo);
+    fetch('http://localhost:5000/correo?asunto=Bienvenida IAA&mensaje=Inscripcion de usuario a IAA completada&correo=' + prop.correo)
+      .then(response => response.text())
+      .then(data => console.log(`Esta es la respuesta del servicio:  ${data}`));
+
+    return prop;
   }
 
   @get('/propietarios/count')
