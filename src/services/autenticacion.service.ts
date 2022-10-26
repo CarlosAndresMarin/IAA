@@ -13,7 +13,7 @@ export class AutenticacionService {
   }
   generarClave() {
     let clave = passwordGen(8, false);
-    return clave();
+    return this.cifrarClave(clave);
   }
 
 
