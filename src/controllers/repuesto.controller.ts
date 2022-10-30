@@ -1,30 +1,62 @@
+import {service} from '@loopback/core';
 import {
   Count,
   CountSchema,
   Filter,
   FilterExcludingWhere,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
-  post,
-  param,
-  get,
-  getModelSchemaRef,
-  patch,
-  put,
-  del,
-  requestBody,
-  response,
+  del, get,
+  getModelSchemaRef, param, patch, post, put, requestBody,
+  response
 } from '@loopback/rest';
 import {Repuesto} from '../models';
 import {RepuestoRepository} from '../repositories';
+import {RepuestoService} from '../services';
 
 export class RepuestoController {
   constructor(
     @repository(RepuestoRepository)
-    public repuestoRepository : RepuestoRepository,
-  ) {}
+    public repuestoRepository: RepuestoRepository,
+    @service(RepuestoService)
+    public repuestoService: RepuestoService
+  ) { }
+
+  @get('/repuestos-filtrados-parteNumero')
+  @response(200, {
+    description: 'Consulta del listado de repuestos filtrados por Parte Numero.',
+    content: {
+      'aplication\json': {
+        schema: {
+          type: 'array',
+          items: getModelSchemaRef(Repuesto, {includeRelations: true}),
+        },
+      },
+    },
+  })
+  async repuestosEncontradosPorParte(): Promise<Repuesto[]> {
+    return this.repuestoService.getRepuestosDisponibles();
+  }
+  @get('/repuestos-filtrados-tipo')
+  @response(200, {
+    description: 'Consulta del listado de repuestos filtrados por tipo.',
+    content: {
+      'aplication\json': {
+        schema: {
+          type: 'array',
+          items: getModelSchemaRef(Repuesto, {includeRelations: true}),
+        },
+      },
+    },
+  })
+  async repuestosEncontradosPorTipo(
+    //@param.path.string('tipo') tipo:string) => Para ingresar el nombre a buscar
+  ): Promise<Repuesto[]> {
+    return this.repuestoService.getRepuestosNombre();
+  }
+
 
   @post('/repuestos')
   @response(200, {
