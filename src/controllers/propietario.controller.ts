@@ -43,7 +43,6 @@ export class PropietarioController {
     })
     propietario: Omit<Propietario, 'id'>,
   ): Promise<Propietario> {
-    //let clave = this.autenticacionService.generarClave();
     propietario.clave = this.autenticacionService.cifrarClave(propietario.clave);
     let prop = await this.propietarioRepository.create(propietario);
     console.log(prop.correo);
