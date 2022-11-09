@@ -31,6 +31,27 @@ export class RepuestoService {
     });
     return repuestos;
   }
+  getRepuestosPrecioMayorA(valor: number): Promise<Repuesto[]> {
+    let repuestos = this.repuestoRepository.find({
+      where: {
+        costo: {gt: valor},
+        //estado: disponible
+      }
+    });
+    return repuestos
+  }
+  getRepuestosPrecioMenorOIgualA(valor: number): Promise<Repuesto[]> {
+    let repuestos = this.repuestoRepository.find({
+      include: ['imagenes', 'propietario'],
+      where: {
+        costo: {lt: valor},
+        //estado: disponible
+      }
+    });
+    return repuestos
+  }
+
+
 
 
   /*

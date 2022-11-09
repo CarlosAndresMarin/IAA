@@ -143,6 +143,43 @@ export class RepuestoController {
     return this.repuestoRepository.findById(id, filter);
   }
 
+  @get('/repuestos-precio-mayor-a/{costo}')
+  @response(200, {
+    description: 'Repuestos con costo mayor A',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'array',
+          items: getModelSchemaRef(Repuesto, {includeRelations: true}),
+        },
+      },
+    },
+  })
+  async repuestosConPrecioMayorA(
+    @param.path.number('costo') costo: number
+  ): Promise<Repuesto[]> {
+    return this.repuestoService.getRepuestosPrecioMayorA(costo);
+  }
+
+  @get('/repuestos-precio-menor-igual-a/{costo}')
+  @response(200, {
+    description: 'Repuestos con costo menor o igual A',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'array',
+          items: getModelSchemaRef(Repuesto, {includeRelations: true}),
+        },
+      },
+    },
+  })
+  async repuestosConPrecioMenorIgualA(
+    @param.path.number('costo') costo: number
+  ): Promise<Repuesto[]> {
+    return this.repuestoService.getRepuestosPrecioMenorOIgualA(costo);
+  }
+
+
   @patch('/repuestos/{id}')
   @response(204, {
     description: 'Repuesto PATCH success',
