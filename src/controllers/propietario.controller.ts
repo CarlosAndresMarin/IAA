@@ -1,3 +1,4 @@
+import {authenticate} from '@loopback/authentication';
 import {service} from '@loopback/core';
 import {
   Count,
@@ -17,7 +18,7 @@ import {Credenciales, Propietario} from '../models';
 import {PropietarioRepository} from '../repositories';
 import {AutenticacionService} from '../services';
 
-
+//@authenticate("admin")
 export class PropietarioController {
   constructor(
     @repository(PropietarioRepository)
@@ -54,7 +55,7 @@ export class PropietarioController {
     return prop;
   }
 
-
+  @authenticate.skip()
   @post('/validar-acceso')
   @response(200, {
     description: 'Valida las credenciales de acceso del propietario'
@@ -76,7 +77,7 @@ export class PropietarioController {
   }
 
 
-
+  @authenticate.skip()
   @get('/propietarios/count')
   @response(200, {
     description: 'Propietario model count',
